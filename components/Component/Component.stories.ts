@@ -5,6 +5,8 @@ import Component from './Component';
 const meta = {
   title: 'Components/Component',
   component: Component,
+  tags: ['autodocs']
+
 } satisfies Meta<typeof Component>;
 
 export default meta;
