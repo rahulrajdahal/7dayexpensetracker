@@ -14,12 +14,14 @@ type IExpenses = Readonly<{
   categories: Pick<Category, 'id' | 'title'>[];
   topExpenses: Expense[];
   todayExpenses: Expense[];
+  categorizedExpenses: (Category & { expenses: Pick<Expense, 'price'>[] })[];
 }>;
 
 export default function Expenses({
   categories,
   topExpenses,
   todayExpenses,
+  categorizedExpenses,
 }: IExpenses) {
   const handleAddExpense = async (prevData: any, formData: FormData) => {
     await addExpense(prevData, formData);
@@ -201,21 +203,23 @@ export default function Expenses({
         </strong>
 
         <ul className='mt-4 flex flex-col gap-4'>
-          {Array(5)
-            .fill(0)
-            .map((_, i) => (
-              <li key={i.toPrecision()} className='flex flex-col gap-2'>
-                <span className='flex items-center justify-between font-semibold'>
-                  <p>Food and Drinks</p>
-                  <p>872,400</p>
-                </span>
-                <progress
-                  max={100}
-                  value={60}
-                  className='h-2 rounded-md bg-primary'
-                />
-              </li>
-            ))}
+          {categorizedExpenses.map(({ id, title, expenses }) => (
+            <li key={id} className='flex flex-col gap-2'>
+              <span className='flex items-center justify-between font-semibold'>
+                <p>{title}</p>
+                <p>
+                  {expenses
+                    .map(({ price }) => price)
+                    .reduce((a, b) => a + b, 0)}
+                </p>
+              </span>
+              <progress
+                max={100}
+                value={60}
+                className='h-2 rounded-md bg-primary'
+              />
+            </li>
+          ))}
         </ul>
       </div>
     </div>
