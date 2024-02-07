@@ -17,7 +17,7 @@ export const addCategory = async (prevState: any, formData: FormData) => {
     try {
 
         const body = {
-            title: formData.get('title') as string
+            title: (formData.get('title') as string).toLowerCase()
         }
 
         const validateBody = categorySchema.safeParse(body)
@@ -36,8 +36,8 @@ export const addCategory = async (prevState: any, formData: FormData) => {
 
         revalidatePath('category')
     } catch (error) {
-        console.log(error,'error')
-        
+        console.log(error, 'error')
+
         if (error instanceof PrismaClientKnownRequestError) {
             throw new Error(
                 error.message
@@ -50,4 +50,25 @@ export const addCategory = async (prevState: any, formData: FormData) => {
 
     }
     redirect('/categories')
+}
+
+export const fetchAllCategories = async (params?: any) => {
+    try {
+
+        const categories = await prisma.category.findMany(params)
+
+        return { categories }
+    } catch (error) {
+        console.log(error, 'error')
+
+        if (error instanceof PrismaClientKnownRequestError) {
+            throw new Error(
+                error.message
+            );
+        }
+
+        throw new Error(
+            'Server Error'
+        );
+    }
 }

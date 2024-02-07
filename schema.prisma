@@ -13,7 +13,9 @@ model Expense {
     title       String
     description String
 
-    categoryId String   @unique
+    price Float
+
+    categoryId String
     category   Category @relation(fields: [categoryId], references: [id])
 
     createdAt DateTime @default(now()) @map(name: "created_at")
