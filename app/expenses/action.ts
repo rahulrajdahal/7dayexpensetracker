@@ -64,7 +64,6 @@ export const fetchAllExpenses = async (params?: any) => {
 
         return { expenses }
     } catch (error) {
-        console.log(error, 'error')
 
         if (error instanceof PrismaClientKnownRequestError) {
             throw new Error(

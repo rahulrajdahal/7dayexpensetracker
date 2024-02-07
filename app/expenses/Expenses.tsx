@@ -5,7 +5,7 @@ import { FormModal, Input } from '@/components';
 import { Category, Expense } from '@prisma/client';
 import moment from 'moment';
 import Image from 'next/image';
-import { useState } from 'react';
+import { useMemo, useState } from 'react';
 import { useFormState, useFormStatus } from 'react-dom';
 import toast from 'react-hot-toast';
 import { addExpense } from './action';
@@ -34,7 +34,14 @@ export default function Expenses({
 
   const { pending, data } = useFormStatus();
 
-  console.log(state, 'staet', data);
+  // const maxPrice = 100;
+  const maxPrice = useMemo(() => {
+    return Math.max(
+      ...categorizedExpenses.map(({ expenses }) =>
+        expenses.map(({ price }) => price).reduce((a, b) => a + b, 0)
+      )
+    );
+  }, [categorizedExpenses]);
 
   return (
     <div className='flex w-full justify-between gap-80'>
@@ -206,7 +213,7 @@ export default function Expenses({
           {categorizedExpenses.map(({ id, title, expenses }) => (
             <li key={id} className='flex flex-col gap-2'>
               <span className='flex items-center justify-between font-semibold'>
-                <p>{title}</p>
+                <p className='capitalize'>{title}</p>
                 <p>
                   {expenses
                     .map(({ price }) => price)
@@ -214,8 +221,10 @@ export default function Expenses({
                 </p>
               </span>
               <progress
-                max={100}
-                value={60}
+                max={maxPrice}
+                value={expenses
+                  .map(({ price }) => price)
+                  .reduce((a, b) => a + b, 0)}
                 className='h-2 rounded-md bg-primary'
               />
             </li>

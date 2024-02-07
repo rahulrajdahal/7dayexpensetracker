@@ -2,20 +2,22 @@ import prisma from '@/utils/prisma';
 import Expenses from './Expenses';
 
 export default async function page() {
-  const categories = await prisma.category.findMany({
-    select: { id: true, title: true },
-  });
+  const [categories, topExpenses, todayExpenses] = await Promise.all([
+    prisma.category.findMany({
+      select: { id: true, title: true },
+    }),
+    prisma.expense.findMany({
+      take: 3,
+      include: { category: { select: { title: true } } },
+      orderBy: { price: 'desc' },
+    }),
+    prisma.expense.findMany({
+      take: 3,
 
-  const topExpenses = await prisma.expense.findMany({
-    take: 3,
-    include: { category: { select: { title: true } } },
-    orderBy: { price: 'desc' },
-  });
-  const todayExpenses = await prisma.expense.findMany({
-    take: 3,
-    include: { category: { select: { title: true } } },
-    orderBy: { createdAt: 'desc' },
-  });
+      include: { category: { select: { title: true } } },
+      orderBy: { createdAt: 'desc' },
+    }),
+  ]);
 
   const categorizedExpenses = await prisma.category.findMany({
     take: 5,

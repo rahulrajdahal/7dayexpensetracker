@@ -36,7 +36,6 @@ export const addCategory = async (prevState: any, formData: FormData) => {
 
         revalidatePath('category')
     } catch (error) {
-        console.log(error, 'error')
 
         if (error instanceof PrismaClientKnownRequestError) {
             throw new Error(
@@ -59,7 +58,6 @@ export const fetchAllCategories = async (params?: any) => {
 
         return { categories }
     } catch (error) {
-        console.log(error, 'error')
 
         if (error instanceof PrismaClientKnownRequestError) {
             throw new Error(
