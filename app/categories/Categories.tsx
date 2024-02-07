@@ -146,7 +146,7 @@ export default function Categories({
                   </div>
 
                   <p className='whitespace-nowrap font-semibold text-[#A8A8A8]'>
-                    {price}
+                    {price.toFixed(2)}
                   </p>
                 </li>
               ))}
@@ -172,7 +172,7 @@ export default function Categories({
                 <p>
                   {expenses
                     .map(({ price }) => price)
-                    .reduce((a, b) => a + b, 0)}
+                    .reduce((a, b) => a + b, 0).toFixed(2)}
                 </p>
               </span>
               <progress

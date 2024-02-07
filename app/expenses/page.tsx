@@ -1,4 +1,4 @@
-import prisma from '@/utils/prisma';
+import prisma from '@/prisma/prisma';
 import Expenses from './Expenses';
 
 export default async function page() {

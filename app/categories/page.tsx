@@ -1,4 +1,4 @@
-import prisma from '@/utils/prisma';
+import prisma from '@/prisma/prisma';
 import Categories from './Categories';
 import { fetchAllCategories } from './action';
 

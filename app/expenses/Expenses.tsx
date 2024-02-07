@@ -159,7 +159,7 @@ export default function Expenses({
                 </span>
               </div>
 
-              <p className='font-semibold'>{price}</p>
+              <p className='font-semibold'>{price.toFixed(2)}</p>
             </li>
           ))}
         </ul>
@@ -198,7 +198,7 @@ export default function Expenses({
                 </span>
               </div>
 
-              <p className='font-semibold'>{price}</p>
+              <p className='font-semibold'>{price.toFixed(2)}</p>
             </li>
           ))}
         </ul>
@@ -217,7 +217,7 @@ export default function Expenses({
                 <p>
                   {expenses
                     .map(({ price }) => price)
-                    .reduce((a, b) => a + b, 0)}
+                    .reduce((a, b) => a + b, 0).toFixed(2)}
                 </p>
               </span>
               <progress
