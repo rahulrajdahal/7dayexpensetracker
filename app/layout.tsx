@@ -20,8 +20,8 @@ export default function RootLayout({ children }: IRootLayout) {
     <html lang='en'>
       <body className={inter.className}>
         <StyledComponentsRegistry>
-          <main className='flex h-screen gap-10 bg-primary px-4  py-8'>
-            <aside className='px-28 py-20'>
+          <main className='flex flex-col gap-10 bg-primary px-4 py-8 md:h-screen  md:flex-row'>
+            <aside className='flex w-full justify-between md:w-auto md:flex-col md:justify-start  md:px-28 md:py-20'>
               <div>
                 <a href='/'>
                   <Image
@@ -45,7 +45,7 @@ export default function RootLayout({ children }: IRootLayout) {
                 <li>
                   <a
                     href='/expenses'
-                    className='text-base font-semibold text-white'
+                    className={`text-base font-semibold text-white`}
                   >
                     Expenses
                   </a>
@@ -61,7 +61,7 @@ export default function RootLayout({ children }: IRootLayout) {
               </ul>
             </aside>
 
-            <div className='w-full rounded-md bg-white py-20 pl-20 pr-4'>
+            <div className='w-full rounded-md bg-white px-2 py-4 md:py-20 md:pl-20 md:pr-4'>
               {children}
             </div>
           </main>

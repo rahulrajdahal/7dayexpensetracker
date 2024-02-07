@@ -44,8 +44,8 @@ export default function Expenses({
   }, [categorizedExpenses]);
 
   return (
-    <div className='flex w-full justify-between gap-80'>
-      <div className='w-[50%]'>
+    <div className='flex w-full flex-col justify-between gap-12 md:flex-row md:gap-80'>
+      <div className='w-full md:w-[50%]'>
         <div className='flex items-center justify-between'>
           <h3 className='text-4xl font-semibold'>Expenses</h3>
 
@@ -204,7 +204,7 @@ export default function Expenses({
         </ul>
       </div>
 
-      <div className='w-[30%]'>
+      <div className='md:w-[30%]'>
         <strong className='text-2xl font-semibold '>
           Where your money go?
         </strong>
