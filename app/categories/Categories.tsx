@@ -171,7 +171,7 @@ export default function Categories({
                     <strong className='capitalize'>{title}</strong>
                   </div>
 
-                  <p className='whitespace-nowrap font-semibold text-[#A8A8A8]'>
+                  <p className='whitespace-nowrap font-semibold text-black'>
                     {price.toFixed(2)}
                   </p>
                 </li>
