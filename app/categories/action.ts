@@ -12,7 +12,6 @@ const categorySchema = z.object({
 })
 
 
-
 export const addCategory = async <T>(prevState: T, formData: FormData) => {
     try {
 

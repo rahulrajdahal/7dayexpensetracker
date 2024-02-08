@@ -3,7 +3,7 @@
 import { useEffect } from 'react';
 import toast from 'react-hot-toast';
 
-export default function Error({
+export default function ExpensesError({
   error,
   reset,
 }: Readonly<{

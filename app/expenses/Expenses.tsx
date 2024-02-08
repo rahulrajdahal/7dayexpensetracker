@@ -1,14 +1,18 @@
 'use client';
 
-import { addCircle, tagOutline } from '@/assets/icons';
+import { addCircle, chevronDown, tagOutline } from '@/assets/icons';
 import { FormModal, Input } from '@/components';
 import { Category, Expense } from '@prisma/client';
 import moment from 'moment';
 import Image from 'next/image';
 import { useMemo, useState } from 'react';
+import DatePicker from 'react-datepicker';
 import { useFormState, useFormStatus } from 'react-dom';
 import toast from 'react-hot-toast';
 import { addExpense } from './action';
+
+import { useRouter, useSearchParams } from 'next/navigation';
+import 'react-datepicker/dist/react-datepicker.css';
 
 type IExpenses = Readonly<{
   categories: Pick<Category, 'id' | 'title'>[];
@@ -23,6 +27,9 @@ export default function Expenses({
   todayExpenses,
   categorizedExpenses,
 }: IExpenses) {
+  const router = useRouter();
+  const searchParams = useSearchParams();
+
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const handleAddExpense = async (prevData: any, formData: FormData) => {
     await addExpense(prevData, formData);
@@ -32,6 +39,7 @@ export default function Expenses({
   };
   const [state, formAction] = useFormState(handleAddExpense, null);
   const [isOpen, setIsOpen] = useState(false);
+  const [selectedDate, setSelectedDate] = useState(new Date());
 
   const { pending } = useFormStatus();
 
@@ -42,6 +50,27 @@ export default function Expenses({
       )
     );
   }, [categorizedExpenses]);
+
+  // const selectedDate = useMemo(() => {
+  //   const date = searchParams.get('date');
+
+  //   console.log(date, 'date');
+
+  //   if (date !== null) {
+  //     return new Date(
+  //       moment()
+  //         .set({
+  //           year: Number(date?.split(' ')[0]),
+  //           month: Number(date?.split(' ')[1]),
+  //           day: Number(date?.split(' ')[2]),
+  //         })
+  //         .toISOString()
+  //     );
+  //   }
+  //   return new Date();
+  // }, [searchParams]);
+
+  console.log(selectedDate, 'selec');
 
   return (
     <div className='flex w-full flex-col justify-between gap-12 md:flex-row md:gap-80'>
@@ -135,7 +164,28 @@ export default function Expenses({
 
         <div className='mt-12 flex w-full justify-between'>
           <strong className='text-2xl font-semibold'>Top Expenses</strong>
-          <p className='font-semibold  text-primary'>Jan 2024</p>
+          <span className='flex w-fit items-center gap-2'>
+            <DatePicker
+              selected={selectedDate}
+              className=' font-semibold  text-primary'
+              onChange={(date: Date) => {
+                const params = new URLSearchParams(searchParams);
+                const paramDate = moment(date).format('DD MM YYYY');
+                setSelectedDate(date);
+                params.set('date', paramDate.replaceAll(' ', '-'));
+                router.push(`?${params}`);
+              }}
+              dateFormat={'MMM YYYY'}
+            />
+            <Image
+              src={chevronDown}
+              alt='date'
+              width={24}
+              height={24}
+              className='h-4 w-4'
+            />
+          </span>
+          {/* <p className='font-semibold  text-primary'>Jan 2024</p> */}
         </div>
         {topExpenses.length > 0 ? (
           <ul className='mt-8 flex flex-col gap-4'>
