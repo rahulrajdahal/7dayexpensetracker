@@ -65,13 +65,6 @@ Inside of project [7DayExpense Tracker](https://7dayexpensetracker.vercel.app), 
 │   ├── index.ts
 │   └── Component
 |       └── Component.tsx
-|       └── Component.stories.ts
-|       └── Component.cy.tsx
-├── cypress/
-│   ├── e2e
-│   │   └── e2etest.cy.ts
-│   ├── fixtures
-│   └── support
 ├── hooks/
 │   └── index.ts
 ├── utils/
