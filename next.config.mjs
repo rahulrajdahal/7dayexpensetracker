@@ -1,6 +1,6 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
-  experimental: { esmExternals: false },
+  transpilePackages: ['@radix-ui'],
 };
 
 export default nextConfig;
