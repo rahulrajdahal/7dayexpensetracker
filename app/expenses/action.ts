@@ -3,18 +3,21 @@
 import prisma from "@/prisma/prisma"
 import { PrismaClientKnownRequestError } from "@prisma/client/runtime/library"
 import { revalidatePath } from "next/cache"
-import { redirect } from "next/navigation"
 import { z } from "zod"
 
 
-
+/**
+ * validation for adding expense.
+ */
 const expenseSchema = z.object({
     title: z.string().min(1, 'Title is required.'),
     description: z.string().min(20, 'Min 20 characters.')
 })
 
-export const addExpense = async <T>(prevState: T, formData: FormData) => {
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+export const addExpense = async (prevState: any, formData: FormData) => {
     try {
+
 
         const body = {
             title: formData.get('title') as string,
@@ -27,7 +30,7 @@ export const addExpense = async <T>(prevState: T, formData: FormData) => {
 
         if (!validateBody.success) {
             return {
-                errors: Object.entries(validateBody.error.flatten().fieldErrors).map(([key, errorValue]) => ({ [key]: errorValue[0] }))[0],
+                errors: (validateBody.error.flatten().fieldErrors),
             }
         }
 
@@ -40,6 +43,8 @@ export const addExpense = async <T>(prevState: T, formData: FormData) => {
 
 
         revalidatePath('expenses')
+        return { type: 'success' }
+
     } catch (error) {
         if (error instanceof PrismaClientKnownRequestError) {
             throw new Error(
@@ -52,7 +57,6 @@ export const addExpense = async <T>(prevState: T, formData: FormData) => {
         );
 
     }
-    redirect('/expenses')
 }
 
 

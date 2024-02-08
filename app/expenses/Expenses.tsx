@@ -5,14 +5,14 @@ import { FormModal, Input } from '@/components';
 import { Category, Expense } from '@prisma/client';
 import moment from 'moment';
 import Image from 'next/image';
-import { useMemo, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import DatePicker from 'react-datepicker';
 import { useFormState, useFormStatus } from 'react-dom';
-import toast from 'react-hot-toast';
 import { addExpense } from './action';
 
 import { useRouter, useSearchParams } from 'next/navigation';
 import 'react-datepicker/dist/react-datepicker.css';
+import toast from 'react-hot-toast';
 
 type IExpenses = Readonly<{
   categories: Pick<Category, 'id' | 'title'>[];
@@ -30,19 +30,22 @@ export default function Expenses({
   const router = useRouter();
   const searchParams = useSearchParams();
 
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  const handleAddExpense = async (prevData: any, formData: FormData) => {
-    await addExpense(prevData, formData);
-
-    toast.success('Expense Added');
-    setIsOpen(false);
-  };
-  const [state, formAction] = useFormState(handleAddExpense, null);
+  const [state, formAction] = useFormState(addExpense, null);
   const [isOpen, setIsOpen] = useState(false);
   const [selectedDate, setSelectedDate] = useState(new Date());
 
   const { pending } = useFormStatus();
 
+  useEffect(() => {
+    if (state?.type === 'success') {
+      toast.success('Expense Added.');
+      setIsOpen(false);
+    }
+  }, [state?.type]);
+
+  /**
+   * the most maximum price from all categorized expenses.
+   */
   const maxPrice = useMemo(() => {
     return Math.max(
       ...categorizedExpenses.map(({ expenses }) =>
@@ -51,33 +54,13 @@ export default function Expenses({
     );
   }, [categorizedExpenses]);
 
-  // const selectedDate = useMemo(() => {
-  //   const date = searchParams.get('date');
-
-  //   console.log(date, 'date');
-
-  //   if (date !== null) {
-  //     return new Date(
-  //       moment()
-  //         .set({
-  //           year: Number(date?.split(' ')[0]),
-  //           month: Number(date?.split(' ')[1]),
-  //           day: Number(date?.split(' ')[2]),
-  //         })
-  //         .toISOString()
-  //     );
-  //   }
-  //   return new Date();
-  // }, [searchParams]);
-
-  console.log(selectedDate, 'selec');
-
   return (
     <div className='flex w-full flex-col justify-between gap-12 md:flex-row md:gap-80'>
       <div className='w-full md:w-[50%]'>
         <div className='flex items-center justify-between'>
           <h3 className='text-4xl font-semibold'>Expenses</h3>
 
+          {/* Modal to add Expense */}
           <FormModal
             isOpen={isOpen}
             setIsOpen={setIsOpen}
@@ -162,6 +145,7 @@ export default function Expenses({
           </FormModal>
         </div>
 
+        {/* Top Expenses  */}
         <div className='mt-12 flex w-full justify-between'>
           <strong className='text-2xl font-semibold'>Top Expenses</strong>
           <span className='flex items-center gap-2'>
@@ -194,7 +178,7 @@ export default function Expenses({
                 <li key={id} className='flex w-full items-center gap-2'>
                   <div className='flex w-full items-center gap-2'>
                     <div className='rounded-full bg-gray-300 p-2 text-2xl shadow-sm'>
-                      {emoji}
+                      {emoji !== '' ? emoji : '👽'}
                     </div>
 
                     <span className=''>
@@ -224,6 +208,7 @@ export default function Expenses({
           <strong>Get organized by adding expenses.</strong>
         )}
 
+        {/* Expenses of Today */}
         <div className='mt-12 flex w-full justify-between'>
           <strong className='text-2xl font-semibold'>
             Today&apos;s Expenses
@@ -237,7 +222,7 @@ export default function Expenses({
                 <li key={id} className='flex w-full items-center gap-2'>
                   <div className='flex w-full items-center gap-2'>
                     <div className='rounded-full bg-gray-300 p-2 text-2xl shadow-sm'>
-                      {emoji}
+                      {emoji !== '' ? emoji : '👽'}
                     </div>
 
                     <span className=''>
@@ -268,6 +253,7 @@ export default function Expenses({
         )}
       </div>
 
+      {/* Expenses made by Category */}
       <div className='md:w-[30%]'>
         <strong className='text-2xl font-semibold '>
           Where your money go?

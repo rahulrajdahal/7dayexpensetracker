@@ -6,15 +6,23 @@ import { Category, Expense } from '@prisma/client';
 import EmojiPicker from 'emoji-picker-react';
 import moment from 'moment';
 import Image from 'next/image';
-import { useMemo, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import { useFormState, useFormStatus } from 'react-dom';
 import toast from 'react-hot-toast';
 import { addCategory } from './action';
 
 type ICategories = Readonly<{
+  /**
+   * Array of categories.
+   */
   categories: Category[];
+  /**
+   * Array of top expenses.
+   */
   topExpenses: (Expense & { category: Pick<Category, 'title' | 'emoji'> })[];
-
+  /**
+   * Array of data for expenses by category
+   */
   categorizedExpenses: (Category & { expenses: Pick<Expense, 'price'>[] })[];
 }>;
 
@@ -23,19 +31,22 @@ export default function Categories({
   topExpenses,
   categorizedExpenses,
 }: ICategories) {
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  const handleAddCategory = async (prevData: any, formData: FormData) => {
-    await addCategory(prevData, formData);
-    toast.success('Category Added');
-    setIsOpen(false);
-  };
-  const [state, formAction] = useFormState(handleAddCategory, null);
+  const [state, formAction] = useFormState(addCategory, null);
   const [isOpen, setIsOpen] = useState(false);
   const [emoji, setEmoji] = useState('');
   const [isEmojiOpen, setIsEmojiOpen] = useState(false);
 
   const { pending } = useFormStatus();
 
+  useEffect(() => {
+    if (state?.type === 'success') {
+      toast.success('Category Added.');
+      setIsOpen(false);
+    }
+  }, [state?.type]);
+  /**
+   * the most maximum price from all categorized expenses.
+   */
   const maxPrice = useMemo(() => {
     return Math.max(
       ...categorizedExpenses.map(({ expenses }) =>
@@ -48,6 +59,8 @@ export default function Categories({
       <div className='w-[50%]'>
         <div className='flex items-center justify-between'>
           <h3 className='text-4xl font-semibold'>Category</h3>
+
+          {/* Modal to add category */}
           <FormModal
             isOpen={isOpen}
             setIsOpen={setIsOpen}
@@ -93,7 +106,6 @@ export default function Categories({
                   inputProps={{
                     placeholder: '🍕',
                     value: emoji,
-                    required: true,
                     onChange: () => setIsEmojiOpen(true),
                   }}
                 />
@@ -116,8 +128,10 @@ export default function Categories({
               </button>
             </form>
           </FormModal>
+          {/* Modal to add category --end */}
         </div>
 
+        {/* Recent Categories in db */}
         {categories.length > 0 ? (
           <>
             <div className='mb-8 mt-12 flex w-full justify-between'>
@@ -132,7 +146,7 @@ export default function Categories({
                   <li key={id} className='flex w-full items-center gap-2'>
                     <div className='flex w-full items-center gap-2'>
                       <div className='rounded-full bg-gray-300 p-2 text-2xl shadow-sm'>
-                        {categoryEmoji}
+                        {categoryEmoji !== '' ? categoryEmoji : '👽'}
                       </div>
 
                       <strong className='capitalize'>{title}</strong>
@@ -151,7 +165,9 @@ export default function Categories({
             Add Categories and organize your expenses.
           </strong>
         )}
+        {/* Recent Categories in db --end */}
 
+        {/* Categorized top expenses  */}
         <div className='mb-8 mt-12 flex w-full justify-between'>
           <strong className='text-2xl font-semibold'>
             Top Expenses By Category
@@ -165,7 +181,7 @@ export default function Categories({
                 <li key={id} className='flex w-full items-center gap-2'>
                   <div className='flex w-full items-center gap-2'>
                     <div className='rounded-full bg-gray-300 p-2 text-2xl shadow-sm'>
-                      {categoryEmoji}
+                      {categoryEmoji !== '' ? categoryEmoji : '👽'}
                     </div>
 
                     <strong className='capitalize'>{title}</strong>
@@ -181,8 +197,10 @@ export default function Categories({
         ) : (
           <strong className=''>Add Expenses and organize your expenses.</strong>
         )}
+        {/* Categorized top expenses --end */}
       </div>
 
+      {/* Expenses made by Category */}
       <div className='w-[30%]'>
         <strong className='text-2xl font-semibold '>
           Where your money go?
@@ -211,6 +229,7 @@ export default function Categories({
           ))}
         </ul>
       </div>
+      {/* Expenses made by Category --end*/}
     </div>
   );
 }
