@@ -3,10 +3,10 @@
 import { useRouter } from 'next/navigation';
 import { useEffect } from 'react';
 
-export default function page() {
+export default function Page() {
   const router = useRouter();
 
   useEffect(() => {
     router.push('/expenses');
-  }, []);
+  }, [router]);
 }

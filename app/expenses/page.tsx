@@ -8,13 +8,13 @@ export default async function page() {
     }),
     prisma.expense.findMany({
       take: 3,
-      include: { category: { select: { title: true } } },
+      include: { category: { select: { title: true, emoji: true } } },
       orderBy: { price: 'desc' },
     }),
     prisma.expense.findMany({
       take: 3,
 
-      include: { category: { select: { title: true } } },
+      include: { category: { select: { title: true, emoji: true } } },
       orderBy: { createdAt: 'desc' },
     }),
   ]);

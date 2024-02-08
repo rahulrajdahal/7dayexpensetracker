@@ -11,6 +11,6 @@ const config: Config = {
       colors: { primary: '#32A7E2' }
     },
   },
-  plugins: [require("@tailwindcss/typography")],
+  plugins: [],
 };
 export default config;

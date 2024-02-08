@@ -3,6 +3,7 @@
 import { addCircle } from '@/assets/icons';
 import { FormModal, Input } from '@/components';
 import { Category, Expense } from '@prisma/client';
+import EmojiPicker from 'emoji-picker-react';
 import moment from 'moment';
 import Image from 'next/image';
 import { useMemo, useState } from 'react';
@@ -16,11 +17,13 @@ type ICategories = Readonly<{
 
   categorizedExpenses: (Category & { expenses: Pick<Expense, 'price'>[] })[];
 }>;
+
 export default function Categories({
   categories,
   topExpenses,
   categorizedExpenses,
 }: ICategories) {
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const handleAddCategory = async (prevData: any, formData: FormData) => {
     await addCategory(prevData, formData);
     toast.success('Category Added');
@@ -28,6 +31,8 @@ export default function Categories({
   };
   const [state, formAction] = useFormState(handleAddCategory, null);
   const [isOpen, setIsOpen] = useState(false);
+  const [emoji, setEmoji] = useState('');
+  const [isEmojiOpen, setIsEmojiOpen] = useState(false);
 
   const { pending } = useFormStatus();
 
@@ -66,12 +71,39 @@ export default function Categories({
               Categorize your expenses.
             </p>
 
-            <form action={formAction}>
+            <form action={formAction} className='flex flex-col gap-4'>
               <Input
                 name='title'
                 label='Category Title'
-                error={(state as any)?.errors?.title as string}
-                inputProps={{ placeholder: 'Rent' }}
+                error={
+                  (state as unknown as { errors: { title: string } })?.errors
+                    ?.title
+                }
+                inputProps={{ placeholder: 'Rent', required: true }}
+              />
+
+              {!isEmojiOpen && (
+                <Input
+                  name='emoji'
+                  label='Emoji'
+                  error={
+                    (state as unknown as { errors: { emoji: string } })?.errors
+                      ?.emoji
+                  }
+                  inputProps={{
+                    placeholder: '🍕',
+                    value: emoji,
+                    required: true,
+                    onChange: () => setIsEmojiOpen(true),
+                  }}
+                />
+              )}
+              <EmojiPicker
+                open={isEmojiOpen}
+                onEmojiClick={({ emoji }) => {
+                  setEmoji(emoji);
+                  setIsEmojiOpen(false);
+                }}
               />
 
               <button
@@ -95,25 +127,23 @@ export default function Categories({
             </div>
 
             <ul className=' flex flex-col gap-4'>
-              {categories.map(({ id, title, createdAt }) => (
-                <li key={id} className='flex w-full items-center gap-2'>
-                  <div className='flex w-full items-center gap-2'>
-                    <Image
-                      src={addCircle}
-                      alt='expense'
-                      width={120}
-                      height={120}
-                      className='h-16 w-16 rounded-full'
-                    />
+              {categories.map(
+                ({ id, title, createdAt, emoji: categoryEmoji }) => (
+                  <li key={id} className='flex w-full items-center gap-2'>
+                    <div className='flex w-full items-center gap-2'>
+                      <div className='rounded-full bg-gray-300 p-2 text-2xl shadow-sm'>
+                        {categoryEmoji}
+                      </div>
 
-                    <strong className='capitalize'>{title}</strong>
-                  </div>
+                      <strong className='capitalize'>{title}</strong>
+                    </div>
 
-                  <p className='whitespace-nowrap font-semibold text-[#A8A8A8]'>
-                    Created at {moment(createdAt).format('L')}
-                  </p>
-                </li>
-              ))}
+                    <p className='whitespace-nowrap font-semibold text-[#A8A8A8]'>
+                      Created at {moment(createdAt).format('L')}
+                    </p>
+                  </li>
+                )
+              )}
             </ul>
           </>
         ) : (
@@ -122,40 +152,36 @@ export default function Categories({
           </strong>
         )}
 
-        {topExpenses.length > 0 ? (
-          <>
-            <div className='mb-8 mt-12 flex w-full justify-between'>
-              <strong className='text-2xl font-semibold'>
-                Top Expenses By Category
-              </strong>
-            </div>
-
-            <ul className=' flex flex-col gap-4'>
-              {topExpenses.map(({ id, price, category }) => (
-                <li key={id} className='flex w-full items-center gap-2'>
-                  <div className='flex w-full items-center gap-2'>
-                    <Image
-                      src={addCircle}
-                      alt='expense'
-                      width={120}
-                      height={120}
-                      className='h-16 w-16 rounded-full'
-                    />
-
-                    <strong className='capitalize'>{category?.title}</strong>
-                  </div>
-
-                  <p className='whitespace-nowrap font-semibold text-[#A8A8A8]'>
-                    {price.toFixed(2)}
-                  </p>
-                </li>
-              ))}
-            </ul>
-          </>
-        ) : (
-          <strong className=''>
-            Add Categories and organize your expenses.
+        <div className='mb-8 mt-12 flex w-full justify-between'>
+          <strong className='text-2xl font-semibold'>
+            Top Expenses By Category
           </strong>
+        </div>
+
+        {topExpenses.length > 0 ? (
+          <ul className=' flex flex-col gap-4'>
+            {topExpenses.map(({ id, price, category }) => (
+              <li key={id} className='flex w-full items-center gap-2'>
+                <div className='flex w-full items-center gap-2'>
+                  <Image
+                    src={addCircle}
+                    alt='expense'
+                    width={120}
+                    height={120}
+                    className='h-16 w-16 rounded-full'
+                  />
+
+                  <strong className='capitalize'>{category?.title}</strong>
+                </div>
+
+                <p className='whitespace-nowrap font-semibold text-[#A8A8A8]'>
+                  {price.toFixed(2)}
+                </p>
+              </li>
+            ))}
+          </ul>
+        ) : (
+          <strong className=''>Add Expenses and organize your expenses.</strong>
         )}
       </div>
 
@@ -172,7 +198,8 @@ export default function Categories({
                 <p>
                   {expenses
                     .map(({ price }) => price)
-                    .reduce((a, b) => a + b, 0).toFixed(2)}
+                    .reduce((a, b) => a + b, 0)
+                    .toFixed(2)}
                 </p>
               </span>
               <progress

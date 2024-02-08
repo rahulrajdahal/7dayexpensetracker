@@ -1,11 +1,11 @@
-# [7DayExpense Tracker](https://github.com/rahulrajdahal/7dayexpensetracker). Track your expenses.
+# [7DayExpense Tracker](https://7dayexpensetracker.vercel.app/). Track your expenses.
 
 ## 🏗 Installation
 
 ### 1. clone the repository
 
 ```sh
-https://github.com/rahulrajdahal/7dayexpensetracker.git
+git clone https://github.com/rahulrajdahal/7dayexpensetracker.git
 ```
 
 ### 2. Install Dependencies
@@ -52,9 +52,14 @@ npm run dev
 npm run start
 ```
 
+## Preview
+
+[![7DayExpense Tracker](./screenshots/7dayexpensetracker.png)](https://7dayexpensetracker.vercel.app/)
+![7dayexpensetracker](./screenshots/add-category.png)
+
 ## 🚀 Project Structure
 
-Inside of project [7DayExpense Tracker](https://github.com/rahulrajdahal/7dayexpensetracker), you'll see the following folders and files:
+Inside of project [7DayExpense Tracker](https://7dayexpensetracker.vercel.app), you'll see the following folders and files:
 
 ```text
 /
@@ -84,11 +89,12 @@ Inside of project [7DayExpense Tracker](https://github.com/rahulrajdahal/7dayexp
 
 All commands are run from the root of the project, from a terminal:
 
-| Command           | Action                                        |
-| :---------------- | :-------------------------------------------- |
-| `npm install`     | Installs dependencies.                        |
-| `npm run dev`     | Starts local dev server at `localhost:3000`.  |
-| `npm run build`   | Build your production site to `./next/`.      |
-| `npm run start`   | Preview your build locally, before deploying. |
-| `npm run lint`    | Check all linting errors.                     |
-| `npx prisma seed` | Seed default data to database.                |
+| Command               | Action                                        |
+| :-------------------- | :-------------------------------------------- |
+| `npm install`         | Installs dependencies.                        |
+| `npm run dev`         | Starts local dev server at `localhost:3000`.  |
+| `npm run build`       | Build your production site to `./next/`.      |
+| `npm run start`       | Preview your build locally, before deploying. |
+| `npm run lint`        | Check all linting errors.                     |
+| `npm run postinstall` | Scripts to run after npm install.             |
+| `npx prisma seed`     | Seed default data to database.                |
