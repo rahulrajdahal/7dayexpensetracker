@@ -12,4 +12,11 @@ export default meta;
 
 type Story = StoryObj<typeof meta>;
 
-export const Default: Story = {};
+export const Default: Story = {
+  args: {
+    children: <p>The modal content</p>,
+    trigger: <button>Click me</button>,
+    isOpen: false,
+    setIsOpen: () => {},
+  },
+};

@@ -1,9 +1,21 @@
 import { DetailedHTMLProps, InputHTMLAttributes } from 'react';
 
 type IInput = Readonly<{
+  /**
+   * name form controller for the input
+   */
   name: string;
+  /**
+   * Input label
+   */
   label?: string;
+  /**
+   * Input error text
+   */
   error?: string;
+  /**
+   * Extends input props
+   */
   inputProps?: DetailedHTMLProps<
     InputHTMLAttributes<HTMLInputElement>,
     HTMLInputElement

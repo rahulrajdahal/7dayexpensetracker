@@ -11,13 +11,25 @@ import {
 import { Dispatch, ReactNode, SetStateAction } from 'react';
 
 type IFormModal = Readonly<{
+  /**
+   * Trigger node to open the modal
+   */
   trigger: ReactNode;
+  /**
+   * Content for the modal
+   */
   children: ReactNode;
+  /**
+   * is the modal open?
+   */
   isOpen: boolean;
+  /**
+   * React state to handle modal state
+   */
   setIsOpen: Dispatch<SetStateAction<boolean>>;
 }>;
 export default function FormModal({
-  isOpen = false,
+  isOpen,
   setIsOpen,
   trigger,
   children,
