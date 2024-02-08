@@ -1,6 +1,4 @@
 /** @type {import('next').NextConfig} */
-const nextConfig = {
-  transpilePackages: ['@radix-ui/react-alert-dialog'],
-};
+const nextConfig = {};
 
 export default nextConfig;
