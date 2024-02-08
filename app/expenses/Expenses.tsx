@@ -164,10 +164,10 @@ export default function Expenses({
 
         <div className='mt-12 flex w-full justify-between'>
           <strong className='text-2xl font-semibold'>Top Expenses</strong>
-          <span className='flex w-fit items-center gap-2'>
+          <span className='flex items-center gap-2'>
             <DatePicker
               selected={selectedDate}
-              className=' font-semibold  text-primary'
+              className=' w-20 font-semibold  text-primary'
               onChange={(date: Date) => {
                 const params = new URLSearchParams(searchParams);
                 const paramDate = moment(date).format('DD MM YYYY');
