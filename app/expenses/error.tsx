@@ -6,10 +6,10 @@ import toast from 'react-hot-toast';
 export default function Error({
   error,
   reset,
-}: {
+}: Readonly<{
   error: Error & { digest?: string };
   reset: () => void;
-}) {
+}>) {
   useEffect(() => {
     // Log the error to an error reporting service
     console.error(error, 'error');
@@ -18,7 +18,7 @@ export default function Error({
   useEffect(() => {
     toast.error(error.message);
     reset();
-  }, [error.message]);
+  }, [error.message, reset]);
 
   console.log(error.digest, ',essage');
 

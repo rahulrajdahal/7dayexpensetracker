@@ -13,7 +13,7 @@ const categorySchema = z.object({
 
 
 
-export const addCategory = async (prevState: any, formData: FormData) => {
+export const addCategory = async <T>(prevState: T, formData: FormData) => {
     try {
 
         const body = {
@@ -51,22 +51,3 @@ export const addCategory = async (prevState: any, formData: FormData) => {
     redirect('/categories')
 }
 
-export const fetchAllCategories = async (params?: any) => {
-    try {
-
-        const categories = await prisma.category.findMany(params)
-
-        return { categories }
-    } catch (error) {
-
-        if (error instanceof PrismaClientKnownRequestError) {
-            throw new Error(
-                error.message
-            );
-        }
-
-        throw new Error(
-            'Server Error'
-        );
-    }
-}

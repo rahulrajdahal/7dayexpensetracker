@@ -23,6 +23,7 @@ export default function Expenses({
   todayExpenses,
   categorizedExpenses,
 }: IExpenses) {
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const handleAddExpense = async (prevData: any, formData: FormData) => {
     await addExpense(prevData, formData);
 
@@ -32,9 +33,8 @@ export default function Expenses({
   const [state, formAction] = useFormState(handleAddExpense, null);
   const [isOpen, setIsOpen] = useState(false);
 
-  const { pending, data } = useFormStatus();
+  const { pending } = useFormStatus();
 
-  // const maxPrice = 100;
   const maxPrice = useMemo(() => {
     return Math.max(
       ...categorizedExpenses.map(({ expenses }) =>
@@ -76,13 +76,19 @@ export default function Expenses({
               <Input
                 name='title'
                 label='Title'
-                error={(state as any)?.errors?.title as string}
+                error={
+                  (state as unknown as { errors: { title: string } })?.errors
+                    ?.title
+                }
                 inputProps={{ placeholder: 'Food', required: true }}
               />
               <Input
                 name='description'
                 label='Description'
-                error={(state as any)?.errors?.description as string}
+                error={
+                  (state as unknown as { errors: { description: string } })
+                    ?.errors?.description
+                }
                 inputProps={{
                   placeholder: 'Pizza and drinks at KFC.',
                   required: true,
@@ -91,7 +97,10 @@ export default function Expenses({
               <Input
                 name='price'
                 label='Price'
-                error={(state as any)?.errors?.price as string}
+                error={
+                  (state as unknown as { errors: { price: string } })?.errors
+                    ?.price
+                }
                 inputProps={{
                   placeholder: 'Rs. 1500',
                   type: 'number',
@@ -165,7 +174,9 @@ export default function Expenses({
         </ul>
 
         <div className='mt-12 flex w-full justify-between'>
-          <strong className='text-2xl font-semibold'>Today's Expenses</strong>
+          <strong className='text-2xl font-semibold'>
+            Today&apos;s Expenses
+          </strong>
         </div>
 
         <ul className='mt-8 flex flex-col gap-4'>
@@ -217,7 +228,8 @@ export default function Expenses({
                 <p>
                   {expenses
                     .map(({ price }) => price)
-                    .reduce((a, b) => a + b, 0).toFixed(2)}
+                    .reduce((a, b) => a + b, 0)
+                    .toFixed(2)}
                 </p>
               </span>
               <progress

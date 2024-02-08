@@ -16,11 +16,13 @@ type ICategories = Readonly<{
 
   categorizedExpenses: (Category & { expenses: Pick<Expense, 'price'>[] })[];
 }>;
+
 export default function Categories({
   categories,
   topExpenses,
   categorizedExpenses,
 }: ICategories) {
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const handleAddCategory = async (prevData: any, formData: FormData) => {
     await addCategory(prevData, formData);
     toast.success('Category Added');
@@ -70,7 +72,10 @@ export default function Categories({
               <Input
                 name='title'
                 label='Category Title'
-                error={(state as any)?.errors?.title as string}
+                error={
+                  (state as unknown as { errors: { title: string } })?.errors
+                    ?.title
+                }
                 inputProps={{ placeholder: 'Rent' }}
               />
 
@@ -172,7 +177,8 @@ export default function Categories({
                 <p>
                   {expenses
                     .map(({ price }) => price)
-                    .reduce((a, b) => a + b, 0).toFixed(2)}
+                    .reduce((a, b) => a + b, 0)
+                    .toFixed(2)}
                 </p>
               </span>
               <progress

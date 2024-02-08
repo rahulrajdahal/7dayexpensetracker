@@ -12,9 +12,9 @@ export const metadata: Metadata = {
   description: 'Track your expenses. Categorize expenses.',
 };
 
-type IRootLayout = {
+type IRootLayout = Readonly<{
   children: React.ReactNode;
-};
+}>;
 export default function RootLayout({ children }: IRootLayout) {
   return (
     <html lang='en'>

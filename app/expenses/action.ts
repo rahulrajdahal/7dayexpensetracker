@@ -56,23 +56,3 @@ export const addExpense = async <T>(prevState: T, formData: FormData) => {
 }
 
 
-
-export const fetchAllExpenses = async (params?: any) => {
-    try {
-
-        const expenses = await prisma.expense.findMany({ ...params, select: { category: { select: { title: true } } } })
-
-        return { expenses }
-    } catch (error) {
-
-        if (error instanceof PrismaClientKnownRequestError) {
-            throw new Error(
-                error.message
-            );
-        }
-
-        throw new Error(
-            'Server Error'
-        );
-    }
-}
