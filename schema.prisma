@@ -3,14 +3,30 @@ generator client {
 }
 
 datasource db {
-    provider = "provider"
+    provider = "postgres"
     url      = env("DATABASE_URL")
 }
 
-model ExampleModel {
+model Expense {
     id String @id @default(cuid())
 
-    // title String
+    title       String
+    description String
+
+    price Float
+
+    categoryId String
+    category   Category @relation(fields: [categoryId], references: [id])
+
+    createdAt DateTime @default(now()) @map(name: "created_at")
+    updatedAt DateTime @updatedAt @map(name: "updated_at")
+}
+
+model Category {
+    id String @id @default(cuid())
+
+    title    String    @unique
+    expenses Expense[]
 
     createdAt DateTime @default(now()) @map(name: "created_at")
     updatedAt DateTime @updatedAt @map(name: "updated_at")
