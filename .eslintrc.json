@@ -1,6 +1,14 @@
 {
   "extends": [
+    "next",
     "next/core-web-vitals",
-    "plugin:storybook/recommended"
-  ]
+    "eslint:recommended",
+    "plugin:@typescript-eslint/recommended",
+    "prettier"
+  ],
+  "parser": "@typescript-eslint/parser",
+  "rules": {
+    "no-unused-vars": [1, { "args": "after-used", "argsIgnorePattern": "^_" }]
+  },
+  "plugins": ["@typescript-eslint"]
 }
