@@ -13,7 +13,7 @@ import { addCategory } from './action';
 
 type ICategories = Readonly<{
   categories: Category[];
-  topExpenses: (Expense & { category: Pick<Category, 'title'> })[];
+  topExpenses: (Expense & { category: Pick<Category, 'title' | 'emoji'> })[];
 
   categorizedExpenses: (Category & { expenses: Pick<Expense, 'price'>[] })[];
 }>;
@@ -160,25 +160,23 @@ export default function Categories({
 
         {topExpenses.length > 0 ? (
           <ul className=' flex flex-col gap-4'>
-            {topExpenses.map(({ id, price, category }) => (
-              <li key={id} className='flex w-full items-center gap-2'>
-                <div className='flex w-full items-center gap-2'>
-                  <Image
-                    src={addCircle}
-                    alt='expense'
-                    width={120}
-                    height={120}
-                    className='h-16 w-16 rounded-full'
-                  />
+            {topExpenses.map(
+              ({ id, price, category: { title, emoji: categoryEmoji } }) => (
+                <li key={id} className='flex w-full items-center gap-2'>
+                  <div className='flex w-full items-center gap-2'>
+                    <div className='rounded-full bg-gray-300 p-2 text-2xl shadow-sm'>
+                      {categoryEmoji}
+                    </div>
 
-                  <strong className='capitalize'>{category?.title}</strong>
-                </div>
+                    <strong className='capitalize'>{title}</strong>
+                  </div>
 
-                <p className='whitespace-nowrap font-semibold text-[#A8A8A8]'>
-                  {price.toFixed(2)}
-                </p>
-              </li>
-            ))}
+                  <p className='whitespace-nowrap font-semibold text-[#A8A8A8]'>
+                    {price.toFixed(2)}
+                  </p>
+                </li>
+              )
+            )}
           </ul>
         ) : (
           <strong className=''>Add Expenses and organize your expenses.</strong>
