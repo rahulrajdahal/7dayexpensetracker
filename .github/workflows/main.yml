@@ -13,7 +13,7 @@ jobs:
       - name: Cypress run
         uses: cypress-io/github-action@v6
         env:
-          CYPRESS_DATABASE_URL: ${{ secrets.CYPRESS_DATABASE_URL }}
+          CYPRESS_DATABASE_URL: postgresql://rahulrajdahal:THKY8es6oQmB@ep-broad-hat-a59p1z0d.us-east-2.aws.neon.tech/7dayexpensetracker-test?sslmode=require
         with:
           build: npm run build
           start: npm start
