@@ -77,7 +77,8 @@ Inside of project [7DayExpense Tracker](https://7dayexpensetracker.vercel.app), 
 ├── components/
 │   ├── index.ts
 │   └── Component
-|       └── Component.tsx
+|       ├── Component.tsx
+|       └── Component.stories.tsx
 ├── hooks/
 │   └── index.ts
 ├── utils/
@@ -89,12 +90,14 @@ Inside of project [7DayExpense Tracker](https://7dayexpensetracker.vercel.app), 
 
 All commands are run from the root of the project, from a terminal:
 
-| Command               | Action                                        |
-| :-------------------- | :-------------------------------------------- |
-| `npm install`         | Installs dependencies.                        |
-| `npm run dev`         | Starts local dev server at `localhost:3000`.  |
-| `npm run build`       | Build your production site to `./next/`.      |
-| `npm run start`       | Preview your build locally, before deploying. |
-| `npm run lint`        | Check all linting errors.                     |
-| `npm run postinstall` | Scripts to run after npm install.             |
-| `npx prisma seed`     | Seed default data to database.                |
+| Command                   | Action                                        |
+| :------------------------ | :-------------------------------------------- |
+| `npm install`             | Installs dependencies.                        |
+| `npm run dev`             | Starts local dev server at `localhost:3000`.  |
+| `npm run build`           | Build your production site to `./next/`.      |
+| `npm run start`           | Preview your build locally, before deploying. |
+| `npm run lint`            | Check all linting errors.                     |
+| `npm run build-storybook` | Build storybook.                              |
+| `npm run storybook`       | Run storybook.                                |
+| `npm run postinstall`     | Run npm scripts after npm install.            |
+| `npx prisma seed`         | Seed default data to database.                |

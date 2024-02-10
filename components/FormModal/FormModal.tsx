@@ -8,7 +8,7 @@ import {
   Root,
   Trigger,
 } from '@radix-ui/react-dialog';
-import { Dispatch, ReactNode, SetStateAction } from 'react';
+import { ReactNode } from 'react';
 
 type IFormModal = Readonly<{
   /**
@@ -26,7 +26,7 @@ type IFormModal = Readonly<{
   /**
    * React state to handle modal state
    */
-  setIsOpen: Dispatch<SetStateAction<boolean>>;
+  setIsOpen: (_open: boolean) => void;
 }>;
 export default function FormModal({
   isOpen,
