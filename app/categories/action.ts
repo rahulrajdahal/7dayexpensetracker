@@ -59,3 +59,56 @@ export const addCategory = async (prevState: any, formData: FormData) => {
     }
 }
 
+export const getAllCategories = async (take: number) => {
+    try {
+        return await prisma.category.findMany({
+            take,
+            orderBy: { createdAt: 'desc' },
+        })
+
+
+    }
+
+    catch (error) {
+
+        if (error instanceof PrismaClientKnownRequestError) {
+            throw new Error(
+                error.message
+            );
+        }
+
+        throw new Error(
+            'Server Error'
+        );
+
+    }
+}
+
+export const getAllCategoriesWithExpenses = async (take: number) => {
+    try {
+
+        return await prisma.category.findMany({
+            take,
+            include: { expenses: { select: { price: true } } },
+            orderBy: { expenses: { _count: 'desc' } },
+        })
+    } catch (error) {
+        if (error instanceof PrismaClientKnownRequestError) {
+            throw new Error(
+                error.message
+            );
+        }
+
+        throw new Error(
+            'Server Error'
+        );
+    }
+}
+
+
+
+
+
+
+
+
