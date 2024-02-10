@@ -5,7 +5,7 @@ import { getAllCategories } from './action';
 
 export default async function page() {
   const [categories, topExpenses, categorizedExpenses] = await Promise.all([
-    getAllCategories({}),
+    getAllCategories({ orderBy: { createdAt: 'desc' } }),
     getAllExpenses({}),
     getAllCategories({
       take: 5,
