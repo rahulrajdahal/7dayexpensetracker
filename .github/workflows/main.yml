@@ -5,6 +5,7 @@ on: push
 jobs:
   cypress-run:
     runs-on: ubuntu-22.04
+    environment: 'CYPRESS_DATABASE_URL'
     steps:
       - name: Checkout
         uses: actions/checkout@v4
@@ -13,7 +14,8 @@ jobs:
       - name: Cypress run
         uses: cypress-io/github-action@v6
         env:
-          CYPRESS_DATABASE_URL: postgresql://rahulrajdahal:THKY8es6oQmB@ep-broad-hat-a59p1z0d.us-east-2.aws.neon.tech/7dayexpensetracker-test?sslmode=require
+          CYPRESS_DATABASE_URL: ${{secrets.CYPRESS_DATABASE_URL}}
         with:
+          component: true
           build: npm run build
           start: npm start
