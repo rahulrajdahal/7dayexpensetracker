@@ -42,5 +42,3 @@ jobs:
           CYPRESS_DATABASE_URL: ${{secrets.CYPRESS_DATABASE_URL}}
         with:
           component: true
-          build: npm run build
-          start: npm start
