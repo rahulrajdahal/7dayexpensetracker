@@ -52,6 +52,18 @@ npm run dev
 npm run start
 ```
 
+### 7. Build Storybook
+
+```sh
+npm run build-storybook
+```
+
+### 8. Run Storybook
+
+```sh
+npm run storybook
+```
+
 ## Preview
 
 [![7DayExpense Tracker](./screenshots/7dayexpensetracker.png)](https://7dayexpensetracker.vercel.app/)

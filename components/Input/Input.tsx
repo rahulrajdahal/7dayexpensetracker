@@ -24,14 +24,9 @@ type IInput = Readonly<{
 export default function Input({ error, label, name, inputProps }: IInput) {
   return (
     <fieldset className=' flex flex-col gap-2'>
-      <label
-            htmlFor={name}
-
-       className='flex flex-col items-start gap-2'>
+      <label htmlFor={name} className='flex flex-col items-start gap-2'>
         {label && (
-          <p
-            className='text-violet11 text-right text-[15px] font-semibold'
-          >
+          <p className='text-violet11 text-right text-[15px] font-semibold'>
             {label}
           </p>
         )}
