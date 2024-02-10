@@ -4,7 +4,7 @@ generator client {
 
 datasource db {
     provider = "postgres"
-    url      = env("CYPRESS_DATABASE_URL")
+    url      = env("DATABASE_URL")
 }
 
 model Expense {
