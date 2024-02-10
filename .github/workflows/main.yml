@@ -16,7 +16,7 @@ jobs:
       - name: Cypress install
         uses: cypress-io/github-action@v6
         env:
-          CYPRESS_DATABASE_URL: ${{secrets.DATABASE_URL}}
+          DATABASE_URL: ${{secrets.DATABASE_URL}}
         with:
           # Disable running of tests within install job
           runTests: false
@@ -39,13 +39,13 @@ jobs:
       - name: Cypress run
         uses: cypress-io/github-action@v6
         env:
-          CYPRESS_DATABASE_URL: ${{secrets.DATABASE_URL}}
+          DATABASE_URL: ${{secrets.DATABASE_URL}}
         with:
           build: npm run build
           start: npm start
       - name: Cypress run Component
         uses: cypress-io/github-action@v6
         env:
-          CYPRESS_DATABASE_URL: ${{secrets.DATABASE_URL}}
+          DATABASE_URL: ${{secrets.DATABASE_URL}}
         with:
           component: true
