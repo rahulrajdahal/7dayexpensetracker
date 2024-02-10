@@ -16,18 +16,24 @@ export default async function page({
           day: Number(date?.split('-')[0]) - 1,
         })
         .toISOString()
-    : moment().format();
+    : new Date(Date.now());
 
   const topExpensesByDate = date
-    ? getAllExpenses({ where: { createdAt: { lte: createdAt } } })
-    : getAllExpenses({});
+    ? getAllExpenses({
+        where: { createdAt: { lte: createdAt } },
+        orderBy: { price: 'desc' },
+      })
+    : getAllExpenses({ orderBy: { price: 'desc' } });
 
   const [categories, topExpenses, todayExpenses] = await Promise.all([
     prisma.category.findMany({
       select: { id: true, title: true },
     }),
     topExpensesByDate,
-    getAllExpenses({ where: { createdAt: { lte: moment().format() } } }),
+    getAllExpenses({
+      where: { createdAt: { lte: new Date(Date.now()) } },
+      orderBy: { createdAt: 'desc' },
+    }),
   ]);
 
   const categorizedExpenses = await prisma.category.findMany({

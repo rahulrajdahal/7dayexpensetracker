@@ -41,7 +41,6 @@ export const addExpense = async (prevState: any, formData: FormData) => {
             }
         })
 
-
         revalidatePath('expenses')
         return { type: 'success' }
 
@@ -60,14 +59,14 @@ export const addExpense = async (prevState: any, formData: FormData) => {
 }
 
 
-export const getAllExpenses = async ({ take = 3, orderBy = { price: 'desc' }, where }: { take?: number, orderBy?: Record<string, unknown>, where?: Record<string, unknown> }) => {
+export const getAllExpenses = async ({ take = 3, orderBy, where }: { take?: number, orderBy?: Record<string, unknown>, where?: Record<string, unknown> }) => {
     try {
-        const expenses = await prisma.expense.findMany({
+        return await prisma.expense.findMany({
             take, where,
             include: { category: { select: { title: true, emoji: true } } },
             orderBy,
         })
-        return expenses
+
     } catch (error) {
         if (error instanceof PrismaClientKnownRequestError) {
             throw new Error(

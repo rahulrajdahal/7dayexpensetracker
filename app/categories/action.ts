@@ -41,7 +41,7 @@ export const addCategory = async (prevState: any, formData: FormData) => {
         await prisma.category.create({ data: body })
 
 
-        revalidatePath('category')
+        revalidatePath('categories')
         return { type: 'success' }
 
     } catch (error) {
