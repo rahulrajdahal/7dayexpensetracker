@@ -1,6 +1,6 @@
 describe('Test Expenses Page', () => {
   it("should visit Expenses Page and tests it's contents", () => {
-    cy.visit('/')
+    cy.visit('/expenses')
 
     cy.url().should('include', '/expenses')
     cy.get('.text-4xl').should('contain.text', 'Expenses')
