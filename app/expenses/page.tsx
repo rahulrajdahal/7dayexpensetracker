@@ -1,5 +1,6 @@
-import prisma from '@/prisma/prisma';
+import { Category, Expense } from '@prisma/client';
 import moment from 'moment';
+import { getAllCategories } from '../categories/action';
 import Expenses from './Expenses';
 import { getAllExpenses } from './action';
 
@@ -23,14 +24,18 @@ export default async function page({
     : getAllExpenses({});
 
   const [categories, topExpenses, todayExpenses] = await Promise.all([
-    prisma.category.findMany({
+    getAllCategories({
       select: { id: true, title: true },
     }),
+
     topExpensesByDate,
-    getAllExpenses({ where: { createdAt: { lte: moment().format() } } }),
+    getAllExpenses({
+      where: { createdAt: { lte: moment().format() } },
+      orderBy: { createdAt: 'desc' },
+    }),
   ]);
 
-  const categorizedExpenses = await prisma.category.findMany({
+  const categorizedExpenses = await getAllCategories({
     take: 5,
     where: { expenses: { every: { price: { lte: topExpenses[0]?.price } } } },
     include: { expenses: { select: { price: true } } },
@@ -42,7 +47,11 @@ export default async function page({
       categories={categories}
       topExpenses={topExpenses}
       todayExpenses={todayExpenses}
-      categorizedExpenses={categorizedExpenses}
+      categorizedExpenses={
+        categorizedExpenses as (Category & {
+          expenses: Pick<Expense, 'price'>[];
+        })[]
+      }
     />
   );
 }

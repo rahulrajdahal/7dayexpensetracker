@@ -1,7 +1,6 @@
 'use client'; // Error components must be Client Components
 
 import { useEffect } from 'react';
-import toast from 'react-hot-toast';
 
 export default function ExpensesError({
   error,
@@ -14,13 +13,6 @@ export default function ExpensesError({
     // Log the error to an error reporting service
     console.error(error, 'error');
   }, [error]);
-
-  useEffect(() => {
-    toast.error(error.message);
-    reset();
-  }, [error.message, reset]);
-
-  console.log(error.digest, ',essage');
 
   return (
     <div>

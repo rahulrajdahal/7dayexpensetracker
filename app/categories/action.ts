@@ -59,12 +59,34 @@ export const addCategory = async (prevState: any, formData: FormData) => {
     }
 }
 
-export const getAllCategories = async ({ take = 3, include, orderBy = { createdAt: 'desc' } }: { take?: number, include?: Record<string, unknown>, orderBy?: Record<string, unknown>, }) => {
+type IParamsWithInclude =
+    { where?: Record<string, unknown>, take?: number, include?: Record<string, unknown>, orderBy?: Record<string, unknown> }
+type IParamsWithSelect =
+    { where?: Record<string, unknown>, take?: number, select?: Record<string, unknown>, orderBy?: Record<string, unknown> }
+
+type IParams = IParamsWithInclude | IParamsWithSelect
+
+export const getAllCategories = async ({ where, take, orderBy = { createdAt: 'desc' }, ...params }: IParams) => {
     try {
-        return await prisma.category.findMany({
-            take, include,
-            orderBy,
-        })
+
+        if ('include' in params) {
+
+
+            return await prisma.category.findMany({
+                take, include: params.include, where,
+                orderBy,
+            })
+        } else if ('select' in params) {
+            return await prisma.category.findMany({
+                take, select: params.select, where,
+                orderBy,
+            })
+        } else {
+            return await prisma.category.findMany({
+                take, where,
+                orderBy,
+            })
+        }
     }
 
     catch (error) {
