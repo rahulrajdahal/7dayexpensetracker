@@ -12,7 +12,8 @@ jobs:
         # and run all Cypress tests
       - name: Cypress run
         uses: cypress-io/github-action@v6
+        env:
+          CYPRESS_DATABASE_URL: ${{env.CYPRESS_DATABASE_URL}}
         with:
-          env: DATABASE_URL="$env.DATABASE_URL"
           build: npm run build
           start: npm start
