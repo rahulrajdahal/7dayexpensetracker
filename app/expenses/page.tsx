@@ -1,43 +1,33 @@
 import prisma from '@/prisma/prisma';
 import moment from 'moment';
 import Expenses from './Expenses';
+import { getAllExpenses } from './action';
 
 export default async function page({
   searchParams: { date },
 }: {
   searchParams: { date: string };
 }) {
-  const createdAt = moment()
-    .set({
-      year: Number(date?.split('-')[2]),
-      month: Number(date?.split('-')[1]) - 1,
-      day: Number(date?.split('-')[0]) - 1,
-    })
-    .toISOString();
+  const createdAt = date
+    ? moment()
+        .set({
+          year: Number(date?.split('-')[2]),
+          month: Number(date?.split('-')[1]) - 1,
+          day: Number(date?.split('-')[0]) - 1,
+        })
+        .toISOString()
+    : moment().format();
 
   const topExpensesByDate = date
-    ? prisma.expense.findMany({
-        take: 3,
-        where: { createdAt: { lte: createdAt } },
-        include: { category: { select: { title: true, emoji: true } } },
-        orderBy: { price: 'desc' },
-      })
-    : prisma.expense.findMany({
-        take: 3,
-        include: { category: { select: { title: true, emoji: true } } },
-        orderBy: { price: 'desc' },
-      });
+    ? getAllExpenses({ where: { createdAt: { lte: createdAt } } })
+    : getAllExpenses({});
 
   const [categories, topExpenses, todayExpenses] = await Promise.all([
     prisma.category.findMany({
       select: { id: true, title: true },
     }),
     topExpensesByDate,
-    prisma.expense.findMany({
-      take: 3,
-      include: { category: { select: { title: true, emoji: true } } },
-      orderBy: { createdAt: 'desc' },
-    }),
+    getAllExpenses({ where: { createdAt: { lte: moment().format() } } }),
   ]);
 
   const categorizedExpenses = await prisma.category.findMany({

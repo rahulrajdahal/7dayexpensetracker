@@ -1,0 +1,12 @@
+{
+    "crons": [
+        {
+            "path": "/app/categories/action.ts",
+            "schedule": "0 5 * * *"
+        },
+        {
+            "path": "/app/expenses/action.ts",
+            "schedule": "0 5 * * *"
+        }
+    ]
+}

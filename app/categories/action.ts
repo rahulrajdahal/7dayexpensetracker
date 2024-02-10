@@ -59,3 +59,33 @@ export const addCategory = async (prevState: any, formData: FormData) => {
     }
 }
 
+export const getAllCategories = async ({ take = 3, include, orderBy = { createdAt: 'desc' } }: { take?: number, include?: Record<string, unknown>, orderBy?: Record<string, unknown>, }) => {
+    try {
+        return await prisma.category.findMany({
+            take, include,
+            orderBy,
+        })
+    }
+
+    catch (error) {
+
+        if (error instanceof PrismaClientKnownRequestError) {
+            throw new Error(
+                error.message
+            );
+        }
+
+        throw new Error(
+            'Server Error'
+        );
+
+    }
+}
+
+
+
+
+
+
+
+

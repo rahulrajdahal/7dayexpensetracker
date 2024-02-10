@@ -1,21 +1,15 @@
-import prisma from '@/prisma/prisma';
+import { Category, Expense } from '@prisma/client';
+import { getAllExpenses } from '../expenses/action';
 import Categories from './Categories';
+import { getAllCategories } from './action';
 
 export default async function page() {
   const [categories, topExpenses, categorizedExpenses] = await Promise.all([
-    prisma.category.findMany({
-      take: 3,
-      orderBy: { createdAt: 'desc' },
-    }),
-    prisma.expense.findMany({
-      take: 3,
-      include: { category: { select: { title: true, emoji: true } } },
-      orderBy: { price: 'desc' },
-    }),
-    prisma.category.findMany({
+    getAllCategories({}),
+    getAllExpenses({}),
+    getAllCategories({
       take: 5,
       include: { expenses: { select: { price: true } } },
-
       orderBy: { expenses: { _count: 'desc' } },
     }),
   ]);
@@ -24,7 +18,11 @@ export default async function page() {
     <Categories
       categories={categories}
       topExpenses={topExpenses}
-      categorizedExpenses={categorizedExpenses}
+      categorizedExpenses={
+        categorizedExpenses as (Category & {
+          expenses: Pick<Expense, 'price'>[];
+        })[]
+      }
     />
   );
 }
